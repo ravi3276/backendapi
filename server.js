@@ -4,10 +4,14 @@ import studentRoute from "./api/routes/student.js";
 import courseRoute from "./api/routes/course.js";
 import bodyParser from "body-parser";
 import user from "./api/routes/user.js";
+import dotenv from "dotenv";
+
+dotenv.config();
+// console.log(process.env.url);
 const port = process.env.PORT || 3000;
 const app = express();
-const url='mongodb+srv://ravi:Raviteja10@cluster0.ax9pg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
-mongoose.connect(url,
+
+mongoose.connect(process.env.url,
 {
     useUnifiedTopology: true,
     useNewUrlParser:true
