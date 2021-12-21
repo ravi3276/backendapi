@@ -4,7 +4,6 @@ import studentRoute from "./api/routes/student.js";
 import courseRoute from "./api/routes/course.js";
 import bodyParser from "body-parser";
 import user from "./api/routes/user.js";
-
 const port = process.env.PORT || 3000;
 const app = express();
 const url='mongodb+srv://ravi:Raviteja10@cluster0.ax9pg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
@@ -22,7 +21,6 @@ app.use(express.urlencoded({ extended: true }))
 app.use('/student',studentRoute)
 app.use('/course',courseRoute)
 app.use('/user',user)
-
 
 
 app.use((req, res) => {

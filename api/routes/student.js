@@ -1,11 +1,11 @@
 import express from "express";
 import Student from '../models/studentModel.js';
 import  mongoose  from "mongoose";
-
+import auth from "../middleware/auth.js";
 const router = express.Router();
 
 // getting all data from Db's
-router.get('/',(req, res)=>{
+router.get('/',auth,(req, res)=>{
     Student.find({})
     .then((data)=>{
         console.log(data); 

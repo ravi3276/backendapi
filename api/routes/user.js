@@ -2,6 +2,7 @@ import express from "express";
 import User from "../models/userModel.js";
 import mongoose  from "mongoose";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 const router = express.Router();
 
 
@@ -23,7 +24,8 @@ router.post('/',(req, res)=>{
                 password:hash,
                 email:req.body.email,
                 phone:req.body.phone,
-                usertype:req.body.usertype
+                usertype:req.body.usertype,
+                createdAt:new Date()
             });
         
             user.save()
@@ -38,6 +40,41 @@ router.post('/',(req, res)=>{
         }
     });
 
+})
+
+router.post('/login',(req, res)=>{
+    User.find({username:req.body.username})
+    .exec() // exactly match
+    .then((user)=>{
+        if(user.length < 1){
+            return res.status(401).json({message:'user not found'})
+        }
+        bcrypt.compare(req.body.password,user[0].password,(err,result)=>{ 
+            if(!result) {return res.status(401).json({message:'password not match'}) }
+            if(result){
+               const token= jwt.sign({
+                    username:user[0].username,
+                    usertype:user[0].usertype,
+                    email:user[0].email,
+                    phone:user[0].phone
+                },
+                "this is my first api",
+                {expiresIn:"24h"}
+                )
+
+                res.status(200).json(
+                    {
+                        username:user[0].username,
+                        usertype:user[0].usertype,
+                        email:user[0].email,
+                        phone:user[0].phone,
+                        token:token
+                    }
+                )
+            }
+        })
+    })
+    .catch(err => res.status(404).json({message:err}))
 })
 
 export default router;
